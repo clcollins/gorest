@@ -1,0 +1,14 @@
+FROM golang:1.8
+LABEL maintainer="Chris Collins <christopher.collins@duke.edu>"
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV BINDIR=/go/src/github.com/clcollins/gorest/
+
+COPY ./ /go/src/github.com/clcollins/gorest/
+WORKDIR ${BINDIR}
+
+RUN go get
+RUN go build -a -installsuffix cgo -v
+
+CMD go test -v
