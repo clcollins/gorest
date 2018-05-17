@@ -11,6 +11,14 @@ import (
 )
 
 func CreateCheeseburger(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+  w.Write([]byte("yo"))
+
+	//for key, value := range r. {
+	//	fmt.Printf("Key: %s\tValue: %v\n", key, value)
+	//}
+	//w.Write([]byte(vars))
+	//fmt.Printf(r["Method"])
 }
 
 func GetCheeseburger(w http.ResponseWriter, r *http.Request) {
@@ -21,13 +29,15 @@ func GetCheeseburger(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetIndex(w http.ResponseWriter, r *http.Request) {
+	response := "There's not really supposed to be an index"
+	w.Write([]byte(response))
 }
 
 func main() {
 	port := "8080"
 	iface := "0.0.0.0"
 
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", GetIndex).Methods("GET")
 	router.HandleFunc("/ichc", GetCheeseburger).Methods("GET")
 	router.HandleFunc("/ichc", CreateCheeseburger).Methods("POST")
