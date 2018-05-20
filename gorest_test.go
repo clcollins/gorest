@@ -39,7 +39,7 @@ func TestGetCheeseburgerResponse(t *testing.T) {
 
 	handler.ServeHTTP(rr, req)
 
-	expected := "CheeseburgerCheeseburger"
+	expected := "CheeseburgerCheeseburger\n"
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
@@ -61,16 +61,8 @@ func TestCreateCheeseburgerOK(t *testing.T) {
 			status, http.StatusOK)
 	}
 }
-
-// THIS TEST IS NOT WORKING
-// I do not think it is passing query parameters,
-// or I have been unable to capture them
-// I cannot confirm that the custom header is being
-// set, either
 func TestCreateCheeseburgerResponse(t *testing.T) {
 	query_params := url.Values{}
-	query_params.Set("toppings", "lettuce")
-	query_params.Add("cheese", "true")
 
 	req, err := http.NewRequest("POST", "/ichc",
 		strings.NewReader(query_params.Encode()))
@@ -84,7 +76,37 @@ func TestCreateCheeseburgerResponse(t *testing.T) {
 
 	handler.ServeHTTP(rr, req)
 
-	expected := "yo"
+	expected := "I'll gladly pay you tuesday for a hamburger today!\n"
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body.String(), expected)
+	}
+}
+
+func TestCreateCheeseburgerResponseParsing(t *testing.T) {
+	// NOTE: THIS TEST IS NOT WORKING.  DOESN'T ADD QUERY parameters
+	// TO THE REQUEST
+	
+	// Tests that the return string includes "cheeseburger" instead
+	// of hamburger if `cheese=SOMETHING` is passed as a query param
+	query_params := url.Values{}
+	query_params.Set("toppings", "lettuce")
+	query_params.Add("cheese", "american")
+
+	req, err := http.NewRequest("POST", "/ichc",
+		strings.NewReader(query_params.Encode()))
+	req.Header.Add("X-gorest_test", "True")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(CreateCheeseburger)
+
+	handler.ServeHTTP(rr, req)
+
+	//expected := "I'll gladly pay you tuesday for a cheeseburger today!\n"
+	expected := "I'll gladly pay you tuesday for a hamburger today!\n"
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)

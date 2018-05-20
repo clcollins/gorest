@@ -12,17 +12,29 @@ import (
 
 func CreateCheeseburger(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
-  w.Write([]byte("yo"))
+	query_params := r.URL.Query()
 
-	//for key, value := range r. {
-	//	fmt.Printf("Key: %s\tValue: %v\n", key, value)
-	//}
-	//w.Write([]byte(vars))
-	//fmt.Printf(r["Method"])
+	var meal string
+	if _, cheese := query_params["cheese"]; cheese {
+		meal = "cheeseburger"
+	} else {
+		meal = "hamburger"
+	}
+
+	fmt.Println(meal)
+
+	response := fmt.Sprintf("I'll gladly pay you tuesday for a %s today!\n", meal)
+
+
+  w.Write([]byte(response))
+
+	for key, value := range query_params {
+		fmt.Printf("Key: %s\tValue: %v\n", key, value)
+	}
 }
 
 func GetCheeseburger(w http.ResponseWriter, r *http.Request) {
-	response := "CheeseburgerCheeseburger"
+	response := "CheeseburgerCheeseburger\n"
 	w.Write([]byte(response))
 	// I'm not yet sure how to work with json encoding
 	//json.NewEncoder(w).Encode(response)
