@@ -15,4 +15,4 @@ WORKDIR ${APPDIR}
 RUN go get
 RUN go build -a -installsuffix cgo -v
 
-CMD go test -v
+RUN go test -v
