@@ -39,7 +39,7 @@ func TestGetCheeseburgerResponse(t *testing.T) {
 
 	handler.ServeHTTP(rr, req)
 
-	expected := "CheeseburgerCheeseburger\n"
+	expected := "CheeseburgerCheeseburger\nWe got the cheeses!"
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
@@ -86,7 +86,7 @@ func TestCreateCheeseburgerResponse(t *testing.T) {
 func TestCreateCheeseburgerResponseParsing(t *testing.T) {
 	// NOTE: THIS TEST IS NOT WORKING.  DOESN'T ADD QUERY parameters
 	// TO THE REQUEST
-	
+
 	// Tests that the return string includes "cheeseburger" instead
 	// of hamburger if `cheese=SOMETHING` is passed as a query param
 	query_params := url.Values{}
